@@ -43,15 +43,12 @@ lpue_sol <- full_join(landings_sol, effort) %>%
          lon = geo::ir2d(`ICES rectangle`)$lon,
          lat = geo::ir2d(`ICES rectangle`)$lat) %>% filter(!is.na(lpue))
 
-# install.packages("mapdata") # haal hashtag weg vooraan rij en voer uit 
+# install.packages("mapdata")
 # install.packages("ggplot2")
 library(mapdata)
 
-# definieer gebied voor kaartjes uit worldHires database
 north_sea <- map_data("worldHires") %>% filter(long > -10 & long < 20 & lat > 50 & lat < 60)
 
-
-# plot gebied met lpue data per jaar
 lpue_sol %>% ggplot() +
   theme_light() +
   geom_tile(aes(lon, lat, fill = lpue)) +
@@ -59,16 +56,4 @@ lpue_sol %>% ggplot() +
   coord_fixed(1.3) +
   facet_wrap(~year)+
   scale_fill_continuous(low = "yellow", high = "red", trans = "log") +
-  coord_quickmap(xlim = c(-5,10), ylim = c(50,60)) +
-  theme(legend.title = element_text(face = "italic", size = 8))
-
-# plot gebied met lpue data per jaar
-lpue_sol %>% ggplot() +
-  theme_light() +
-  geom_tile(aes(lon, lat, fill = lpue)) +
-  geom_polygon(data = north_sea, aes(long, lat, group = group), color = "grey") +
-  coord_fixed(1.3) +
-  facet_wrap(~year)+
-  scale_fill_continuous(low = "yellow", high = "red", trans = "log") +
-  coord_quickmap(xlim = c(-5,10), ylim = c(50,60)) +
-  theme(legend.title = element_text(face = "italic", size = 8))
+  coord_quickmap(xlim = c(-5,10), ylim = c(50,60))
